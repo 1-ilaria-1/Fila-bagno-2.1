@@ -16,8 +16,6 @@
   <script type="module">
     // Importa le librerie Firebase
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-analytics.js";
-    import { getAuth } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
     import { getDatabase, ref, push, remove, onChildAdded, onValue } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
 
     // Configurazione Firebase
@@ -34,22 +32,7 @@
 
     // Inizializzazione Firebase
     const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const auth = getAuth();
     const database = getDatabase();
-
-    // Controlla lo stato di autenticazione
-    auth.onAuthStateChanged(function (user) {
-      if (user) {
-        // L'utente è autenticato
-        console.log("Utente autenticato:", user.uid);
-        // Qui puoi eseguire le operazioni di lettura/scrittura nel database
-      } else {
-        // L'utente non è autenticato
-        console.log("Utente non autenticato");
-        // Potresti voler reindirizzare l'utente al processo di autenticazione
-      }
-    });
 
     const queueForm = document.getElementById("queue-form");
     const queueList = document.getElementById("queue-list");
