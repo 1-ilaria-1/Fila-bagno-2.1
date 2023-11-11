@@ -1,9 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fila Condivisa con Firebase</title>
+<html lang="en"> 
+ <head> 
+  <meta charset="UTF-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>Fila Condivisa con Firebase</title> 
+ </head> 
+ <body> 
+  <h1>Fila Condivisa con Firebase</h1> 
+  <form id="queue-form"> 
+   <input type="text" id="name" placeholder="Inserisci il tuo nome" required>
+   <button type="submit">Aggiungi alla fila</button> 
+  </form> 
+  <ul id="queue-list"></ul> 
+  <p id="queue-status">Persone in fila: 0</p> 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-analytics.js";
@@ -25,9 +34,12 @@
     const analytics = getAnalytics(app);
     const auth = getAuth();
     const database = getDatabase();
+    const queueForm = document.getElementById("queue-form");
+    const queueList = document.getElementById("queue-list");
+    const queueStatus = document.getElementById("queue-status");
     const queueRef = ref(database, "fila");
 
-    auth.onAuthStateChanged(user => {
+    auth.onAuthStateChanged(function (user) {
       if (user) {
         console.log("Utente autenticato:", user.uid);
       } else {
@@ -35,11 +47,7 @@
       }
     });
 
-    const queueForm = document.getElementById("queue-form");
-    const queueList = document.getElementById("queue-list");
-    const queueStatus = document.getElementById("queue-status");
-
-    onChildAdded(queueRef, childSnapshot => {
+    onChildAdded(queueRef, (childSnapshot) => {
       const name = childSnapshot.val();
       const listItem = document.createElement("li");
       listItem.textContent = name;
@@ -49,7 +57,7 @@
       deleteButton.addEventListener("click", () => {
         const key = childSnapshot.key;
         if (key) {
-          remove(ref(queueRef, key), error => {
+          remove(ref(queueRef, key), (error) => {
             if (error) {
               console.error("Errore durante la rimozione:", error);
             }
@@ -61,17 +69,17 @@
       queueList.appendChild(listItem);
     });
 
-    onValue(queueRef, snapshot => {
+    onValue(queueRef, (snapshot) => {
       const queueArray = [];
-      snapshot.forEach(childSnapshot => {
+      snapshot.forEach((childSnapshot) => {
         const name = childSnapshot.val();
         queueArray.push(name);
       });
 
-      queueStatus.textContent = `Persone in fila: ${queueArray.length}`;
+      queueStatus.textContent = "Persone in fila: " + queueArray.length;
     });
 
-    queueForm.addEventListener("submit", e => {
+    queueForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const nameInput = document.getElementById("name");
       const name = nameInput.value;
@@ -81,15 +89,6 @@
         nameInput.value = "";
       }
     });
-  </script>
-</head>
-<body>
-  <h1>Fila Condivisa con Firebase</h1>
-  <form id="queue-form">
-    <input type="text" id="name" placeholder="Inserisci il tuo nome" required>
-    <button type="submit">Aggiungi alla fila</button>
-  </form>
-  <ul id="queue-list"></ul>
-  <p id="queue-status">Persone in fila: 0</p>
-</body>
+  </script> 
+ </body>
 </html>
