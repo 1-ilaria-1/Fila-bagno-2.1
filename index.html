@@ -1,18 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fila Condivisa con Firebase</title>
-</head>
-<body>
-  <h1>Fila Condivisa con Firebase</h1>
-  <form id="queue-form">
-    <input type="text" id="name" placeholder="Inserisci il tuo nome" required>
-    <button type="submit">Aggiungi alla fila</button>
-  </form>
-  <ul id="queue-list"></ul>
-  <p id="queue-status">Persone in fila: 0</p>
+<!doctype html>
+<html lang="en"> 
+<head> 
+  <meta charset="UTF-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>Fila Condivisa con Firebase</title> 
+</head> 
+<body> 
+  <h1>Fila Condivisa con Firebase</h1> 
+  <form id="queue-form"> 
+    <input type="text" id="name" placeholder="Inserisci il tuo nome" required> 
+    <button type="submit">Aggiungi alla fila</button> 
+  </form> 
+  <ul id="queue-list"></ul> 
+  <p id="queue-status">Persone in fila: 0</p> 
   <script type="module">
     // Importa le librerie Firebase
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
@@ -65,13 +65,11 @@
       deleteButton.textContent = "Elimina";
       deleteButton.addEventListener("click", () => {
         const itemRef = ref(queueRef, childSnapshot.key);
-        remove(itemRef)
-          .then(() => {
-            console.log("Persona rimossa con successo.");
-          })
-          .catch((error) => {
+        remove(itemRef, (error) => {
+          if (error) {
             console.error("Errore durante la rimozione:", error);
-          });
+          }
+        });
       });
 
       listItem.appendChild(deleteButton);
@@ -98,6 +96,6 @@
         nameInput.value = "";
       }
     });
-  </script>
+  </script> 
 </body>
 </html>
