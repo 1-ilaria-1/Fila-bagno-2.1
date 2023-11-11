@@ -51,6 +51,8 @@
         remove(itemRef, (error) => {
           if (error) {
             console.error("Errore durante la rimozione:", error);
+          } else {
+            console.log("Rimozione avvenuta con successo");
           }
         });
       });
