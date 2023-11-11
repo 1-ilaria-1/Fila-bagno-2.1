@@ -16,7 +16,7 @@
   <script type="module">
     // Importa le librerie Firebase
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
-    import { getDatabase, ref, push, remove, onChildAdded, onValue } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+    import { getDatabase, ref, push, remove, onChildAdded, onChildRemoved, onValue } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
 
     // Configurazione Firebase
     const firebaseConfig = {
@@ -48,17 +48,21 @@
       deleteButton.textContent = "Elimina";
       deleteButton.addEventListener("click", () => {
         const itemRef = ref(queueRef, childSnapshot.key);
-        remove(itemRef, (error) => {
-          if (error) {
-            console.error("Errore durante la rimozione:", error);
-          } else {
-            console.log("Rimozione avvenuta con successo");
-          }
-        });
+        remove(itemRef);
       });
 
       listItem.appendChild(deleteButton);
       queueList.appendChild(listItem);
+    });
+
+    onChildRemoved(queueRef, (childSnapshot) => {
+      const listItems = queueList.getElementsByTagName("li");
+      for (let i = 0; i < listItems.length; i++) {
+        if (listItems[i].textContent === childSnapshot.val()) {
+          listItems[i].remove();
+          break;
+        }
+      }
     });
 
     onValue(queueRef, (snapshot) => {
