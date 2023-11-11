@@ -1,4 +1,4 @@
-<!doctype html>
+      <!doctype html>
 <html lang="en"> 
  <head> 
   <meta charset="UTF-8"> 
@@ -63,7 +63,11 @@
       const deleteButton = document.createElement("button");
       deleteButton.textContent = "Elimina";
       deleteButton.addEventListener("click", () => {
-        remove(ref(queueRef, childSnapshot.key));
+        remove(ref(queueRef, childSnapshot.key), (error) => {
+          if (error) {
+            console.error("Errore durante la rimozione:", error);
+          }
+        });
       });
 
       listItem.appendChild(deleteButton);
