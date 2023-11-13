@@ -39,6 +39,15 @@
       const queueList = document.getElementById("queue-list");
       const queueStatus = document.getElementById("queue-status");
 
+      // Funzione per rimuovere una persona dalla fila
+      const removePerson = (key) => {
+        remove(ref(queueRef, key), (error) => {
+          if (error) {
+            console.error("Errore durante la rimozione:", error);
+          }
+        });
+      };
+
       onChildAdded(queueRef, (childSnapshot) => {
         const name = childSnapshot.val();
         const listItem = document.createElement("li");
@@ -47,12 +56,8 @@
         const deleteButton = document.createElement("button");
         deleteButton.textContent = "Elimina";
         deleteButton.addEventListener("click", () => {
-          // Rimuovi la persona dalla fila
-          remove(ref(queueRef, childSnapshot.key), (error) => {
-            if (error) {
-              console.error("Errore durante la rimozione:", error);
-            }
-          });
+          // Chiamiamo la funzione di rimozione con la chiave del child
+          removePerson(childSnapshot.key);
         });
 
         listItem.appendChild(deleteButton);
@@ -75,12 +80,10 @@
         const name = nameInput.value;
 
         if (name) {
-          // Aggiungi la persona alla fila
           push(queueRef, name);
           nameInput.value = "";
         }
       });
     </script>
   </body>
-  </html>
-  
+</html>
