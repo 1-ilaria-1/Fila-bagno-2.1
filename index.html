@@ -93,13 +93,13 @@
   };
 
   // Funzione per rimuovere una persona dalla fila
-  const removePerson = (key, listItem) => {
+  const removePerson = (key, listItemToRemove) => {
     remove(ref(queueRef, key), (error) => {
       if (error) {
         console.error("Errore durante la rimozione:", error);
       } else {
         // Rimuovi l'elemento HTML dalla lista
-        listItem.remove();
+        listItemToRemove.remove();
       }
     });
   };
@@ -113,8 +113,10 @@
     const deleteButton = document.createElement("button");
     deleteButton.textContent = "Elimina";
     deleteButton.addEventListener("click", () => {
-      // Chiamiamo la funzione di rimozione con la chiave del child
-      removePerson(childSnapshot.key, listItem);
+      // Ottieni il riferimento all'elemento genitore del pulsante Elimina (cioè l'elemento li)
+      const listItemToRemove = deleteButton.parentElement;
+      // Chiamiamo la funzione di rimozione con la chiave del child e l'elemento HTML da rimuovere
+      removePerson(childSnapshot.key, listItemToRemove);
     });
 
     listItem.appendChild(deleteButton);
