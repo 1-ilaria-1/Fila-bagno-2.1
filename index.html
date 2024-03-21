@@ -105,23 +105,23 @@
   };
 
   // Funzione per gestire l'aggiunta di un bambino alla fila
-  onChildAdded(queueRef, (childSnapshot) => {
-    const name = childSnapshot.val();
-    const listItem = document.createElement("li");
-    listItem.textContent = name;
+onChildAdded(queueRef, (childSnapshot) => {
+  const name = childSnapshot.val();
+  const listItem = document.createElement("li");
+  listItem.textContent = name;
 
-    const deleteButton = document.createElement("button");
-    deleteButton.textContent = "Elimina";
-    deleteButton.addEventListener("click", () => {
-      // Ottieni il riferimento all'elemento genitore del pulsante Elimina (cioè l'elemento li)
-      const listItemToRemove = deleteButton.parentElement;
-      // Chiamiamo la funzione di rimozione con la chiave del child e l'elemento HTML da rimuovere
-      removePerson(childSnapshot.key, listItemToRemove);
-    });
-
-    listItem.appendChild(deleteButton);
-    queueList.appendChild(listItem);
+  const deleteButton = document.createElement("button");
+  deleteButton.textContent = "Elimina";
+  deleteButton.addEventListener("click", (event) => {
+    // Ottieni il riferimento all'elemento li contenente il nome
+    const listItem = event.target.closest('li');
+    // Chiamiamo la funzione di rimozione con la chiave del child e l'elemento HTML da rimuovere
+    removePerson(childSnapshot.key, listItem);
   });
+
+  listItem.appendChild(deleteButton);
+  queueList.appendChild(listItem);
+});
 
   // Aggiorna lo stato della fila quando cambiano i dati nel database
   onValue(queueRef, (snapshot) => {
